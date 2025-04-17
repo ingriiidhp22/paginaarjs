@@ -66,26 +66,28 @@
         embedded arjs='trackingMethod: best; sourceType: webcam; debugUIEnabled: false;'>
 
         <a-assets>
-            <video src="pruebafinal.mp4"
-                preload="auto" id="vid" response-type="arraybuffer" loop
-                crossorigin webkit-playsinline autoplay muted playsinline>
-            </video>
-        </a-assets>
+		<video src="pruebafinal.mp4"
+		preload="auto" id="vid" loop
+		crossorigin webkit-playsinline muted playsinline>
+			
+		</video>
+		</a-assets>
+	    
+	    <a-nft 
+		videohandler
+		type='nft' url='dataNFT/bocetoacuarela'
+		smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="5"
+>
+    <a-video
+        src="#vid"
+        position='0 0 0'
+        rotation='-90 0 0'
+        width='1'
+        height='0.5625'>
+    </a-video>
+</a-nft>
 
-        <a-nft
-            videohandler
-            type='nft' url='dataNFT/bocetoacuarela'
-            smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="5"
-        >
-            <a-video
-                src="#vid"
-                position='50 150 -100'
-                rotation='90 0 180'
-                width='300'
-                height='175'
-                >
-            </a-video>
-        </a-nft>
+		
 		<a-entity camera></a-entity>
 	</a-scene>
 </body>
