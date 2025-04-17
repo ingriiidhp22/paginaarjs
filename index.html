@@ -1,92 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tenerte Siempre</title>
-    <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1.3.0/dist/aframe-master.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tenerte Siempre</title>
 
-<script src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
-<!--script src='../../../../aframe/build/aframe-ar-nft.js'></script-->
+  <!-- A-Frame + AR.js -->
+  <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1.3.0/dist/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 
-
-<script>
-    window.onload = function() {
-        AFRAME.registerComponent('videohandler', {
-            init: function () {
-                var marker = this.el;
-                this.vid = document.querySelector("#vid");
-
-                // Asegurarse de que está muteado y listo para reproducir en móviles
-                this.vid.muted = true;
-                this.vid.setAttribute('playsinline', '');
-
-                marker.addEventListener('markerFound', () => {
-		console.log("¡Marcador detectado!");
-                    this.vid.play();
-                });
-
-                marker.addEventListener('markerLost', () => {
-                    this.vid.pause();
-                    this.vid.currentTime = 0;
-                });
-            }
-        });
-    };
-</script>
-
-<style>
+  <!-- Estilos de carga -->
+  <style>
     .arjs-loader {
-        height: 100%;
-        width: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        background-color: rgba(0.5, 0, 0.5, 0.8);
-        z-index: 9999;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: rgba(0.5, 0, 0.5, 0.8);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .arjs-loader div {
-        text-align: center;
-        font-size: 1.25em;
-        color: white;
+      text-align: center;
+      font-size: 1.25em;
+      color: white;
     }
-</style>
+  </style>
+
+  <!-- Script para manejo de video -->
+  <script>
+    window.onload = function () {
+      AFRAME.registerComponent("videohandler", {
+        init: function () {
+          const marker = this.el;
+          const vid = document.querySelector("#vid");
+
+          vid.muted = true;
+          vid.setAttribute("playsinline", "");
+          vid.setAttribute("webkit-playsinline", "");
+          vid.load(); // fuerza la carga del video
+
+          marker.addEventListener("markerFound", () => {
+            console.log("Marcador detectado");
+            vid.play();
+          });
+
+          marker.addEventListener("markerLost", () => {
+            vid.pause();
+            vid.currentTime = 0;
+          });
+        }
+      });
+    };
+  </script>
 </head>
-<body style='margin : 0px; overflow: hidden;'>
-    <div class="arjs-loader">
-        <div>Cargando, por favor espere...</div>
-    </div>
-    <a-scene
-        vr-mode-ui="enabled: false;"
-        renderer='antialias: true; alpha: true; precision: medium;'
-        embedded arjs='trackingMethod: best; sourceType: webcam; debugUIEnabled: false;'>
 
-        <a-assets>
-            <video src="pruebafinal.mp4"
-                preload="auto" id="vid" response-type="arraybuffer" loop
-                crossorigin webkit-playsinline autoplay muted playsinline>
-            </video>
-        </a-assets>
+<body style="margin: 0; overflow: hidden;">
+  <!-- Pantalla de carga -->
+  <div class="arjs-loader">
+    <div>Cargando, por favor espere...</div>
+  </div>
 
-        <a-nft
-            videohandler
-            type='nft' url='dataNFT/bocetoacuarela'
-            smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="5"
-        >
-            <a-video
-                src="#vid"
-                position='50 150 -100'
-                rotation='90 0 180'
-                width='300'
-                height='175'
-                >
-            </a-video>
-        </a-nft>
-		<a-entity camera></a-entity>
-	</a-scene>
+  <!-- Escena A-Frame -->
+  <a-scene
+    vr-mode-ui="enabled: false"
+    renderer="antialias: true; alpha: true; precision: medium;"
+    embedded
+    arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+  >
+    <!-- Activos cargados -->
+    <a-assets>
+      <video
+        id="vid"
+        src="pruebafinal.mp4"
+        preload="auto"
+        loop
+        crossorigin="anonymous"
+        muted
+        playsinline
+        webkit-playsinline
+      ></video>
+    </a-assets>
+
+    <!-- Marcador NFT -->
+    <a-nft
+      videohandler
+      type="nft"
+      url="dataNFT/bocetoacuarela"
+      smooth="true"
+      smoothCount="10"
+      smoothTolerance="0.01"
+      smoothThreshold="5"
+    >
+      <!-- Video 3D -->
+      <a-video
+        src="#vid"
+        position="50 150 -100"
+        rotation="90 0 180"
+        width="300"
+        height="175"
+      ></a-video>
+    </a-nft>
+
+    <!-- Cámara -->
+    <a-entity camera></a-entity>
+  </a-scene>
 </body>
 </html>
