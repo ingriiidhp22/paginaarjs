@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Tenerte Siempre</title>
 
-  <!-- A-Frame + AR.js -->
-<script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+  <!--  A-Frame primero -->
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
 
-<script src="https://raw.githack.com/AR-js-org/AR.js/3.4.2/aframe/build/aframe-ar-nft.js"></script>
-
+  <!--  AR.js después -->
+  <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.2/aframe/build/aframe-ar-nft.min.js"></script>
 
   <!-- Estilos de carga -->
   <style>
@@ -32,33 +32,6 @@
       color: white;
     }
   </style>
-
-  <!-- Script para manejo de video -->
-  <script>
-    window.onload = function () {
-      AFRAME.registerComponent("videohandler", {
-        init: function () {
-          const marker = this.el;
-          const vid = document.querySelector("#vid");
-
-          vid.muted = true;
-          vid.setAttribute("playsinline", "");
-          vid.setAttribute("webkit-playsinline", "");
-          vid.load(); // fuerza la carga del video
-
-          marker.addEventListener("markerFound", () => {
-            console.log("Marcador detectado");
-            vid.play();
-          });
-
-          marker.addEventListener("markerLost", () => {
-            vid.pause();
-            vid.currentTime = 0;
-          });
-        }
-      });
-    };
-  </script>
 </head>
 
 <body style="margin: 0; overflow: hidden;">
@@ -67,30 +40,28 @@
     <div>Cargando, por favor espere...</div>
   </div>
 
-  <!-- Escena A-Frame -->
+  <!-- Escena AR -->
   <a-scene
     vr-mode-ui="enabled: false"
     renderer="antialias: true; alpha: true; precision: medium;"
     embedded
     arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
   >
-    <!-- Activos cargados -->
+    <!-- Assets -->
     <a-assets>
       <video
-        <a-assets>
-  <video
-    id="vid"
-    src="pruebafinal.mp4"
-    preload="auto"
-    loop
-    muted
-    playsinline
-    webkit-playsinline
-    crossorigin="anonymous"
-  ></video>
+        id="vid"
+        src="pruebafinal.mp4"
+        preload="auto"
+        loop
+        muted
+        playsinline
+        webkit-playsinline
+        crossorigin="anonymous"
+      ></video>
     </a-assets>
 
-    <!-- Marcador NFT -->
+    <!-- NFT Marker -->
     <a-nft
       videohandler
       type="nft"
@@ -100,7 +71,6 @@
       smoothTolerance="0.01"
       smoothThreshold="5"
     >
-      <!-- Video 3D -->
       <a-video
         src="#vid"
         position="50 150 -100"
@@ -113,5 +83,30 @@
     <!-- Cámara -->
     <a-entity camera></a-entity>
   </a-scene>
+
+  <!--  Script del componente AL FINAL -->
+  <script>
+    AFRAME.registerComponent("videohandler", {
+      init: function () {
+        const marker = this.el;
+        const vid = document.querySelector("#vid");
+
+        vid.muted = true;
+        vid.setAttribute("playsinline", "");
+        vid.setAttribute("webkit-playsinline", "");
+        vid.load();
+
+        marker.addEventListener("markerFound", () => {
+          console.log("Marcador detectado");
+          vid.play();
+        });
+
+        marker.addEventListener("markerLost", () => {
+          vid.pause();
+          vid.currentTime = 0;
+        });
+      }
+    });
+  </script>
 </body>
 </html>
